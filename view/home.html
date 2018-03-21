@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+<link rel="stylesheet" type="text/css" href="asset/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="asset/css/custom.css">
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Friend Book</a>
+			</div>
+			<div class="clearfix">
+				<div class="pull-left">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="home.html">Home</a></li>
+						<li><a href="#">Profile</a></li>
+					</ul>
+				</div>
+				<div class="pull-right">
+					<ul class="nav navbar-nav">
+						<div class="sm-md-3"><input type="button" class="btn btn-info logOutbtn" value="Logout">
+           		 		</div>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="card">
+					 <nav class="sidebar">
+						<div class="sidebar-sticky">
+							<ul class="nav flex-column">
+								<li class="nav-item">
+								<a class="nav-link active" href="home.html">HOME</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">profile</a>
+							</li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+<div class="col-md-6">
+    <div class="card">
+        <div class="postCreateWrap">
+            <textarea class="form-control postWriteField" placeholder="Write here..."></textarea>
+            <div class="clearfix">
+                <button class="btn btn-info pull-right postbtn" style="margin-top: 5px;">Post</button>
+            </div>
+        </div>
+        <div class="postListWrap">
+						<!-- For post list -->
+		</div>
+    </div>
+</div>
+<div class="col-md-2"> </div>
+<script type="text/javascript" src="asset/js/jquery.min.js"></script>
+<script type="text/javascript">
+	$(window).on('load', function(){
+			var access_token = localStorage.getItem("access_token");
+
+			var request = $.ajax({
+			 	"url": "http://localhost:3006/user/get_post_list",
+			 	"type": "post",
+			 	"data": {
+			 		"access_token" : access_token
+			 	}
+			});
+			request.success(function(data){
+			 	var postListData = data.response;
+			 	console.log(postListData);
+
+			 	$('.postListWrap').empty();
+			 	for (var i = 0; i < postListData.length; i++) {
+			 		$('.postListWrap').append('<div class="postList" data-postID="'+postListData[i]["post_id"]+'">\
+							<div class="postCreatorDetails clearfix">\
+								<img src="/asset/image/p1.jpg" class="img-circle" width="40px" height="40px">\
+								<h3>'+postListData[i]["name"]+'</h3>\
+							</div>\
+							<div class="postListContentArea">\
+								<h4>'+postListData[i]["post_text"]+'</h4>\
+								<div style="margin: 5px 0px;"><button class="btn btn-info postlikebtn" style="margin-top: 5px;">Like</button>\<a href="#">comment</a></div>\
+								<div>\
+									<input type="text" class="form-control" name="" style="margin-bottom: 10px;">\
+									<div class="postCreatorDetails clearfix">\
+										<img src="/asset/image/p1.jpg" class="img-circle" width="40px" height="40px">\
+										<h3>Name</h3>\
+										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s</p>\
+									</div>\
+									<div class="postCreatorDetails clearfix">\
+										<img src="/asset/image/p1.jpg" class="img-circle" width="40px" height="40px">\
+										<h3>Name</h3>\
+										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s</p>\
+									</div>\
+								</div>\
+							</div>\
+						</div>');
+			 	}
+			});
+			request.fail(function(error){
+			 	
+			});
+		});
+	$(document).ready(function() {
+	    var access_token = localStorage.getItem("access_token");
+	    console.log(access_token);
+	    $('.postbtn').click(function(event) {
+
+	        event.preventDefault();
+	        var post_text = $('.postWriteField').val();
+	        var request = $.ajax({
+	            "url": "http://localhost:3006/user/post",
+	            "type": "post",
+	            "data": {
+	                "post_text": post_text,
+	                "access_token": access_token
+	            }
+	        });
+	        request.success(function(data) {
+	            var postListData = data.response;
+	            console.log(postListData);
+            	for (var i = 0; i < postListData.length; i++){
+	            $('.postListWrap').prepend('<div class="postList">\
+							<div class="postCreatorDetails clearfix">\
+								<img src="/asset/image/p1.jpg" class="img-circle" width="40px" height="40px">\
+								<h3>' + postListData[i]["name"] + '</h3>\
+							</div>\
+							<div class="postListContentArea">\
+								<h4>' + postListData[i]["post_text"] + '</h4>\
+								<div style="margin: 5px 0px;"><button class="btn btn-info postlikebtn" style="margin-top: 5px;">Like</button>\<a href="#">comment</a></div>\
+								<div>\
+									<input type="text" class="form-control" name="" style="margin-bottom: 10px;">\
+									<div class="postCreatorDetails clearfix">\
+										<img src="/asset/image/p1.jpg" class="img-circle" width="40px" height="40px">\
+										<h3>Name</h3>\
+										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s</p>\
+									</div>\
+									<div class="postCreatorDetails clearfix">\
+										<img src="/asset/image/p1.jpg" class="img-circle" width="40px" height="40px">\
+										<h3>Name</h3>\
+										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s</p>\
+									</div>\
+								</div>\
+							</div>\
+						</div>');
+	        }
+
+	        });
+
+
+	        request.fail(function(error){
+				 	var err = error.responseJSON.message;
+				 	$('.errorContainerWrap').show();
+				 	$('.errorContainerWrap').html(err);
+				});
+	    });
+	    $('.logOutbtn').click(function(e) {
+	        e.preventDefault();
+	        localStorage.removeItem("access_token");
+	        localStorage.removeItem("user");
+	        window.location.replace('index.html');
+	    });
+	    $(document).on('click', '.postlikebtn', function(event){
+                event.preventDefault();
+                var post_id = $(this).parents('.postList').attr("data-postID");
+                console.log(post_id);
+	        	var request = $.ajax({
+	            "url": "http://localhost:3006/user/postLike",
+	            "type": "post",
+	            "data": {
+	            	"post_id" : post_id,
+	                "access_token": access_token
+	            }
+	        });
+            }); 
+
+
+        });
+</script>
+</body>
+</html>
