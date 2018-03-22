@@ -31,6 +31,7 @@ app.post('/user/login', user_panel.login);
 app.post('/user/post',user_panel.post);
 app.post('/user/get_post_list',user_panel.get_post_list);
 app.post('/user/postLike',user_panel.postLike);
+app.post('/user/postComment',user_panel.postComment);
 app.listen(port, function(){
 	console.log("Server is running on port "+port);
 });

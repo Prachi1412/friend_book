@@ -244,6 +244,7 @@ exports.postLike = function(req, res) {
                     var values = [user_id, post_id, on_date];
                     connection.query(insertsql, values, function(err, result) {
                         if (err) {
+                            console.log(err);
                             responses.sendError(res);
                         } else {
                            // console.log("post Liked and Data inserted")
@@ -256,6 +257,48 @@ exports.postLike = function(req, res) {
         }
     })
 }
+//comment
+exports.postComment = function(req,res){
+    var arr = [];
+    var user_id = req.body.user_id;
+    var access_token = req.body.access_token;
+    var post_id = req.body.post_id;
+    var comment_text = req.body.comment_text;
+    var post_comment_id = md5(new Date());
+    var on_date = new Date();
+        var sql = "SELECT `user_id` from `registration` WHERE `access_token`=?";
+        connection.query(sql, [access_token], function(err, result) {
+            if (err) {
+                responses.sendError(res);
+                } else {
+                    var user_id = result[0].user_id;
+                    console.log(user_id);
+
+                var status_sql = "INSERT INTO `post_comment`(`post_comment_id`,`post_id`,`user_id`,`comment_text`,`on_date`) VALUES(?,?,?,?,?)";
+                    var values = [post_comment_id,post_id, user_id,comment_text,on_date];
+                connection.query(status_sql, values, function(err) {
+                    if (err) {
+                       console.log(err);
+                     responses.sendError(res);
+            } else {
+                    let user_id = result[0].user_id;
+                    var sql = "SELECT * FROM `post_comment`";
+                    connection.query(sql, [user_id], function(err, postList) {
+                        if (err) {
+                            responses.sendError(res);
+                        } else {
+                          
+                            }
+                        });
+                    }
+                });
+            }
+        });
+}
+
+
+
+
     
 
 
